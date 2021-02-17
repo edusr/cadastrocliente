@@ -2,6 +2,7 @@ package org.edu.cadastrocliente.domain;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.Period;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -47,6 +49,9 @@ public class Cliente implements Serializable {
 	@JoinColumn(name = "codCid")
 	@NotNull(message = "A cidade é obrigatório")
 	private Cidade cidade;
+	
+	
+	
 
 	public Long getCodigo() {
 		return codigo;
@@ -86,6 +91,14 @@ public class Cliente implements Serializable {
 
 	public void setCidade(Cidade cidade) {
 		this.cidade = cidade;
+	}
+	
+	@Transient
+	public Integer getIdade() {
+		if(this.getDataNascimento() != null) {
+			return Period.between(dataNascimento, LocalDate.now()).getYears();
+		}
+		return null;
 	}
 
 }
